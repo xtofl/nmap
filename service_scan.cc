@@ -2728,36 +2728,35 @@ static int shouldWePrintFingerprint(ServiceNFO *svc) {
 // Nmap to output later.
 
 static void processResults(ServiceGroup *SG) {
-  for(const auto &svc_: SG->services_finished){
-   const auto *svc = &svc_;
-   if ((*svc)->probe_state != PROBESTATE_FINISHED_NOMATCH) {
+  for(const auto &svc: SG->services_finished){
+   if (svc->probe_state != PROBESTATE_FINISHED_NOMATCH) {
      std::vector<const char *> cpe;
 
      for(const auto &matched: {
-        svc_->cpe_a_matched,
-        svc_->cpe_h_matched,
-        svc_->cpe_o_matched }) {
+        svc->cpe_a_matched,
+        svc->cpe_h_matched,
+        svc->cpe_o_matched }) {
        if (*matched) cpe.push_back(matched);
      }
 
-     (*svc)->target->ports.setServiceProbeResults((*svc)->portno, (*svc)->proto,
-                                          (*svc)->probe_state,
-                                          (*svc)->probe_matched,
-                                          (*svc)->tunnel,
-                                          *(*svc)->product_matched? (*svc)->product_matched : NULL,
-                                          *(*svc)->version_matched? (*svc)->version_matched : NULL,
-                                          *(*svc)->extrainfo_matched? (*svc)->extrainfo_matched : NULL,
-                                          *(*svc)->hostname_matched? (*svc)->hostname_matched : NULL,
-                                          *(*svc)->ostype_matched? (*svc)->ostype_matched : NULL,
-                                          *(*svc)->devicetype_matched? (*svc)->devicetype_matched : NULL,
+     svc->target->ports.setServiceProbeResults(svc->portno, svc->proto,
+                                          svc->probe_state,
+                                          svc->probe_matched,
+                                          svc->tunnel,
+                                          *svc->product_matched? svc->product_matched : NULL,
+                                          *svc->version_matched? svc->version_matched : NULL,
+                                          *svc->extrainfo_matched? svc->extrainfo_matched : NULL,
+                                          *svc->hostname_matched? svc->hostname_matched : NULL,
+                                          *svc->ostype_matched? svc->ostype_matched : NULL,
+                                          *svc->devicetype_matched? svc->devicetype_matched : NULL,
                                           (cpe.size() > 0) ? &cpe : NULL,
-                                          shouldWePrintFingerprint(*svc) ? (*svc)->getServiceFingerprint(NULL) : NULL);
+                                          shouldWePrintFingerprint(svc) ? svc->getServiceFingerprint(NULL) : NULL);
    }  else {
-       (*svc)->target->ports.setServiceProbeResults((*svc)->portno, (*svc)->proto,
-                                            (*svc)->probe_state, NULL,
-                                            (*svc)->tunnel, NULL, NULL, NULL, NULL, NULL, NULL,
+       svc->target->ports.setServiceProbeResults(svc->portno, svc->proto,
+                                            svc->probe_state, NULL,
+                                            svc->tunnel, NULL, NULL, NULL, NULL, NULL, NULL,
                                             NULL,
-                                            (*svc)->getServiceFingerprint(NULL));
+                                            svc->getServiceFingerprint(NULL));
    }
  }
 }
