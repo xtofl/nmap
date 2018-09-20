@@ -2733,12 +2733,12 @@ static void processResults(ServiceGroup *SG) {
    if ((*svc)->probe_state != PROBESTATE_FINISHED_NOMATCH) {
      std::vector<const char *> cpe;
 
-     if (*(*svc)->cpe_a_matched)
-       cpe.push_back((*svc)->cpe_a_matched);
-     if (*(*svc)->cpe_h_matched)
-       cpe.push_back((*svc)->cpe_h_matched);
-     if (*(*svc)->cpe_o_matched)
-       cpe.push_back((*svc)->cpe_o_matched);
+     for(const auto &matched: {
+        svc_->cpe_a_matched,
+        svc_->cpe_h_matched,
+        svc_->cpe_o_matched }) {
+       if (*matched) cpe.push_back(matched);
+     }
 
      (*svc)->target->ports.setServiceProbeResults((*svc)->portno, (*svc)->proto,
                                           (*svc)->probe_state,
