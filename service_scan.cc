@@ -2728,9 +2728,8 @@ static int shouldWePrintFingerprint(ServiceNFO *svc) {
 // Nmap to output later.
 
 static void processResults(ServiceGroup *SG) {
-std::list<ServiceNFO *>::iterator svc;
-
- for(svc = SG->services_finished.begin(); svc != SG->services_finished.end(); svc++) {
+  for(const auto &svc_: SG->services_finished){
+   const auto *svc = &svc_;
    if ((*svc)->probe_state != PROBESTATE_FINISHED_NOMATCH) {
      std::vector<const char *> cpe;
 
